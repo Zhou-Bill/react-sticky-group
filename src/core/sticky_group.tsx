@@ -9,9 +9,6 @@ import { EventBus } from "../utils/event";
 interface StickyGroupProps {
   /** 距离顶部距离 */
   offsetTop: number;
-  /** 定义顺序, 在每个sticky.Query中定义 */
-  // order: string[],
-  
   /** 是否使用fixed定位 */
   useFixed?: boolean;
   children: React.ReactNode;
@@ -100,10 +97,7 @@ export const StickyGroup = (props: StickyGroupProps) => {
 
     const finalOffsetTop = scrollTop
 
-    // scrollTopRef.current = finalOffsetTop;
-
     let index = -1;
-    // console.log(memoizedStickyHeight)
 
     for (let i = memoizedStickyHeight.length - 1; i >= 0; i--) {
       const item = memoizedStickyHeight[i];
