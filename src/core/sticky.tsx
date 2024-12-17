@@ -1,4 +1,4 @@
-import { useContext, useEffect, useMemo, useRef } from "react";
+import { useCallback, useContext, useEffect, useMemo, useRef } from "react";
 import { StickyDomRect, StickyProps } from "./types";
 import { StickyContext } from "./context";
 import './sticky.less';
@@ -44,30 +44,35 @@ const Sticky = (props: StickyProps) => {
     return { target, isFixed };
   }, [stickyKey, memoizedStickyHeight, activeIndex])
 
-  return (
-    <>
-       <div 
+
+  const placeholderNode = useCallback((options: {
+    ref?: React.RefObject<HTMLDivElement>
+    useFixed: boolean
+    target?: StickyDomRect | null
+    isFixed?: boolean
+    activeIndex?: number
+    isOriginal?: boolean
+  }) => {
+    const { ref, useFixed, target, isFixed, isOriginal } = options;
+    return  (
+      <div 
         ref={ref} 
         className={classNames({
           'sticky': !useFixed,
+          'sticky-fixed': useFixed && isFixed
         })} 
-        style={{ top: target?.offsetTop }}
+        style={{ top: target?.offsetTop, width: !isOriginal ? target?.width : undefined }}
       >
         {children}
       </div>
-      {
-        useFixed && isFixed && (
-          <div
-            className={classNames({
-              'sticky-fixed': useFixed && isFixed,
-            })} 
-            style={{ top: target?.offsetTop, width: target?.width  }}
-          >
-            {children}
-          </div>
-        )
-      }
-      
+    )
+  }, [children])
+
+  return (
+    <>
+      {placeholderNode({ref, useFixed, target, isOriginal: true})}
+       
+      {useFixed && isFixed && activeIndex >= 0 && placeholderNode({ useFixed, target, activeIndex, isFixed, isOriginal: false })}
     </>
    
   );

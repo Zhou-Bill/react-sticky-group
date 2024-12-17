@@ -90,8 +90,12 @@ export const StickyGroup = (props: StickyGroupProps) => {
     return result;
   }, [stickyHeightMap, offsetTop]);
 
-  const handleScroll = useLatest((e: Event) => {
-    const scrollTop = e.target instanceof Document
+  const handleScroll = useLatest((e?: Event) => {
+    if (!useFixed) {
+      return;
+    }
+
+    const scrollTop = e?.target instanceof Document
         ? e.target.documentElement.scrollTop || e.target.body.scrollTop
         : document.documentElement.scrollTop
 
@@ -107,7 +111,7 @@ export const StickyGroup = (props: StickyGroupProps) => {
       }
     }
 
-    if (index > -1) {
+    if (index > -1 ) {
       setActiveIndex(index)
     }
   })

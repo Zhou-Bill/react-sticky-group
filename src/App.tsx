@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className='page'>
-      <StickyGroup offsetTop={0}>
+      <StickyGroup offsetTop={56}>
         <Sticky stickyKey='a'>
           <div style={{ background: 'yellow' }}>a</div>
         </Sticky>
